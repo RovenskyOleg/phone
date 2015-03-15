@@ -1,0 +1,14 @@
+{
+  "name"         : "loopMe",
+  "version"      : "0.0.0",
+  "description"  : "Mobile application.",
+  "main"         : "server.js",
+  "author"       : "Oleg Rovenskyi",
+  "dependencies" : {
+    "express"    : "~4.7.2",
+    "gzippo": "^0.2.0",
+    "morgan"     : "~1.2.2",
+    "body-parser": "~1.5.2",
+    "method-override": "~2.1.2"
+    }
+}
