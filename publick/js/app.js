@@ -13,19 +13,63 @@ var bannerModule = function(options) {
         },
 
         helper = {
+            socialBar: {
+                'like': 0,
+                'dislike': 0,
+                'stop': 0,
+                'share': 0
+            },
+
             applyData: function(options) {
-                var data = options || {};
-                console.log(data.ads[0].data.image_url);
-                // ui.description.text(data.description);
-                // ui.header.text(data.title);
-                // ui.notes.text(data.note);
-                ui.image.find('.img').attr('src', 'img/' + data.ads[0].data.image_url);
+                var data = options || {},
+                    image = ui.image;
+
+                image.src = data.ads[0].data.image_url;
+
+                image.onload = function () {
+                    //triggered request
+                
+                };   
+            },
+
+            setCounter: function(name, data) {
+                var count = helper.socialBar,
+                    store;
+
+                if (count[name] == 0) {
+                    store = localStorage.getItem(name);
+
+                    if (store === null) {
+                        count[name] += 1;
+                    } else {
+                        console.log(store)
+                        count[name] = +store + 1; // '+store' its conver to number 
+                    }
+                } else {
+                    count[name] += 1;
+                }
+
+                return count[name]; 
+            },
+
+            setToStorage: function(nameStore) {
+                if(typeof(Storage) !== "undefined") {
+                    var count = helper.setCounter(nameStore);
+
+                    localStorage.setItem(nameStore, count);
+                } else {
+                    console.log('No Storage');
+                }
             }
         },
 
         events = {
-            close: function() {
-                console.log('Hi close')
+            close: function() {                
+                var el_content = doc.getElementById("main-content");
+                
+                el_content.classList.add("hide");
+
+                //triggered request
             },
 
             image: function() {
@@ -38,19 +82,19 @@ var bannerModule = function(options) {
             },
 
             like: function() {
-                console.log('Hi like')
+                helper.setToStorage('like');
             },
 
             dislike: function() {
-                console.log('Hi dislike')
+                helper.setToStorage('dislike');
             },
 
             stop: function() {
-                console.log('Hi stop')
+                helper.setToStorage('stop');
             },
 
             share: function() {
-                console.log('Hi share')
+                helper.setToStorage('share');
             },
         },
 

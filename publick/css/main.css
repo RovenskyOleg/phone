@@ -22,6 +22,9 @@ body {
     right: 0;
 }
 
+.hide {
+    display: none;
+}
 
 /*======== orientations ============*/
 @media all and (min-device-width:301px)and (orientation:landscape) {
