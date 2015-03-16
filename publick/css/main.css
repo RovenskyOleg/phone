@@ -1,12 +1,10 @@
 body {
     padding-top: 50px;
-    background-color: green; 
 }
 
 #main-content {
     font-family: Arial, sans-serif;
     margin: auto;
-    background-color: white;
     
     -webkit-box-shadow: 3px 3px 5px 0 rgba(201, 201, 201, 0.75);
     -moz-box-shadow:    3px 3px 5px 0 rgba(201, 201, 201, 0.75);
@@ -20,6 +18,23 @@ body {
     top: 0;
     bottom: 0; 
     right: 0;
+    z-index: 1
+}
+
+#main-content:after {
+    content: ' ';
+    width: 100%;
+    height: 100%;
+    background: -moz-radial-gradient(center, ellipse cover,  rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 100%); /* FF3.6+ */
+    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,rgba(0,0,0,0.65)), color-stop(100%,rgba(0,0,0,0))); /* Chrome,Safari4+ */
+    background: -webkit-radial-gradient(center, ellipse cover,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-radial-gradient(center, ellipse cover,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%); /* Opera 12+ */
+    background: -ms-radial-gradient(center, ellipse cover,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%); /* IE10+ */
+    background: radial-gradient(ellipse at center,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6000000', endColorstr='#00000000',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+    z-index: 0;
+    position: absolute;
+    top: 0;
 }
 
 .hide {
@@ -33,9 +48,9 @@ body {
         position: fixed;
         background-color: #E5E4E2;
         height: 35px;
-        left: 13%;
+        left: 0%;
         top: 0;
-        width: 87%;
+        width: 100%;
         z-index: 100;
     }
 
@@ -43,13 +58,14 @@ body {
         color: #fff;
         padding-top: 10px;
         position: relative;
-        left: 35%;
+        
+        left: 47%;
     }
 
     .fa-times {
         position: absolute;
         top: 1px;
-        left: 57%;
+        left: 47%;
 
         color: #f00;
     }
@@ -62,6 +78,7 @@ body {
 }
 
 .button {
+    color: #00AF33;
     padding-top: 20px;
     padding-bottom: 10px;
 }
@@ -100,7 +117,7 @@ body {
         padding-left: 15px;
     }
 }
-@media only screen and (max-device-width:990px)and (orientation:portrait) {
+@media only screen and (max-device-width:990px) and (orientation:portrait) {
 /*======= header ===============*/
     #header {
         position: fixed;
@@ -137,6 +154,7 @@ body {
 }
 
 .button {
+    color: #00AF33;
     padding-top: 20px;
 }
 /*=====================*/
@@ -177,43 +195,48 @@ body {
     }
 }
 
+.round{
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px; /* future proofing */
+    -khtml-border-radius: 10px; /* for old Konqueror browsers */
+}
+
 /*====== img responsive =========*/
-@media only screen and (max-device-height: 480px) {
-    #image-responsive {
-        margin: auto;
+@media only screen and (min-device-width: 320px) and (max-device-width: 360px) and (orientation:portrait)  {
+    #image {
         height: 220px;
     }
 }
 
-@media only screen and (min-device-height: 490px) and (max-device-height: 568px) {
-    #image-responsive {
-        margin: auto;
-        padding-top: 20px;
+@media only screen and (min-device-width: 360px) and (orientation:portrait)  {
+    #image {
         height: 350px;
     }
 }
 
-@media only screen and (min-device-height: 600px) and (max-device-height: 992px) {
-    #image-responsive  {
-        margin: auto;
-        height: 400px;
-    }
-}
-
-
-@media only screen and (min-device-width: 360px) {
-    #image-responsive {
+@media only screen and (min-device-width: 360px) and (min-device-width: 480px) and (orientation:landscape)  {
+    #image {
         height: 140px;
     }
 }
 
-@media only screen and (min-device-width: 490px) and (max-device-height: 568px) {
-    #image-responsive {
-        height: 200px;
+@media only screen and (min-device-width: 480px) and (max-device-width: 568px) and (orientation:landscape) {
+    #image {
+        height: 180px;
+    }
+}
+
+@media only screen and (min-device-width: 568px) and (max-device-width: 640px) and (orientation:landscape) {
+    #image {
+        height: 220px;
     }
 }
 /*====== end ===============*/
 
+.footer {
+    z-index: 101;
+}
 
 /*========== settings color for footer ==========*/
     #stop, #share {

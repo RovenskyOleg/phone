@@ -1,15 +1,16 @@
 var bannerModule = function(options) {
     var params = options || {},
         doc = document,
+        facade = new Facade();
 
         ui = {
-            'close': doc.getElementById(options.close),
-            'image': doc.getElementById(options.image),
-            'download': doc.getElementById(options.download),
-            'like': doc.getElementById(options.like),
-            'dislike': doc.getElementById(options.dislike),
-            'stop': doc.getElementById(options.stop),
-            'share': doc.getElementById(options.share)
+            'close': doc.getElementById(params.close),
+            'image': doc.getElementById(params.image),
+            'download': doc.getElementById(params.download),
+            'like': doc.getElementById(params.like),
+            'dislike': doc.getElementById(params.dislike),
+            'stop': doc.getElementById(params.stop),
+            'share': doc.getElementById(params.share)
         },
 
         helper = {
@@ -23,11 +24,15 @@ var bannerModule = function(options) {
             applyData: function(options) {
                 var data = options || {},
                     image = ui.image;
-
+                
                 image.src = data.ads[0].data.image_url;
 
                 image.onload = function () {
-                    //triggered request
+                    //triggered requesыt
+                    console.log('IMG Load')
+                    var inbox_open = cachedData.session.beacons.inbox_open;
+
+                    facade.getResult("GET", inbox_open, helper.successCallback)
                 
                 };   
             },
@@ -42,7 +47,6 @@ var bannerModule = function(options) {
                     if (store === null) {
                         count[name] += 1;
                     } else {
-                        console.log(store)
                         count[name] = +store + 1; // '+store' its conver to number 
                     }
                 } else {
@@ -60,6 +64,10 @@ var bannerModule = function(options) {
                 } else {
                     console.log('No Storage');
                 }
+            },
+
+            successCallback: function(data) {
+                console.log(data)
             }
         },
 
@@ -68,21 +76,33 @@ var bannerModule = function(options) {
                 var el_content = doc.getElementById("main-content");
                 
                 el_content.classList.add("hide");
-
-                //triggered request
             },
 
             image: function() {
-                console.log('Hi image')
+                var click_url = cachedData.ads[0].data.click_url;
 
+                window.location.replace(click_url);
             },
 
             download: function() {
                 console.log('Hi download')
             },
 
-            like: function() {
+            like: function() {                
+                var ad_like = cachedData.ads[0].beacons.ad_like,
+                    script = doc.createElement("script"),
+                    head;
+                
+                script.type = "text/javascript";
+                script.src = ad_like;
+
+                head = doc.getElementsByTagName('head')[0];
+
+                head.appendChild(script);
+
                 helper.setToStorage('like');
+
+                //facade.getResult("GET", ad_like, helper.successCallback)
             },
 
             dislike: function() {
@@ -90,15 +110,22 @@ var bannerModule = function(options) {
             },
 
             stop: function() {
+                var ad_hide = cachedData.ads[0].beacons.ad_hide;
+
                 helper.setToStorage('stop');
+
+                facade.getResult("GET", ad_hide, helper.successCallback)
             },
 
             share: function() {
+                var ad_share = cachedData.ads[0].beacons.ad_share;
                 helper.setToStorage('share');
+
+                facade.getResult("GET", ad_share, helper.successCallback)
             },
         },
 
-        cachedData = [];
+    cachedData = [];
 
     //events mapping
     for (var key in ui) {
@@ -118,13 +145,15 @@ var bannerModule = function(options) {
             helper.applyData(cachedData);
         },
         loadData: function() {
+            var uri = 'publick/json/test_data.json';
             var self = this;
-            $.get('js/info_box.json', function(data) {
-                cachedData = data;
-            })
-            .done(function() {
-                self.init();
-            });
+            
+            function successCallback(data) {
+                cachedData = JSON.parse(data);
+                self.init(); // may be use underscore.js
+            };
+
+            facade.getResult("GET", uri, successCallback);
         }
     };
 };
@@ -132,7 +161,7 @@ var bannerModule = function(options) {
 window.onload = function() { 
     var activeModule = new bannerModule({
         close: 'close',
-        image: 'image-responsive',
+        image: 'image',
         download: 'download',
         like: 'like',
         dislike: 'dislike',
@@ -141,9 +170,8 @@ window.onload = function() {
     });
 
     //with mock
-    activeModule.setData(mockJSON);
+    //activeModule.setData(mockJSON);
 
     //with ajax 
-    //activeModule.loadData();
-
+    activeModule.loadData();
 }
