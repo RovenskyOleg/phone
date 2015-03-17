@@ -26,14 +26,13 @@ var bannerModule = function(options) {
                     image = ui.image;
                 
                 image.src = data.ads[0].data.image_url;
+                doc.getElementById('mirror').src = data.ads[0].data.image_url;
 
                 image.onload = function () {
-                    //triggered requesыt
-                    console.log('IMG Load')
-                    var inbox_open = cachedData.session.beacons.inbox_open;
+                    var inbox_open = cachedData.session.beacons.inbox_open,
+                        data = {};
 
-                    facade.getResult("GET", inbox_open, helper.successCallback)
-                
+                    facade.getJSONP(inbox_open, data);
                 };   
             },
 
@@ -73,9 +72,13 @@ var bannerModule = function(options) {
 
         events = {
             close: function() {                
-                var el_content = doc.getElementById("main-content");
+                var el_content = doc.getElementById("main-content"),
+                    ad_hide = cachedData.ads[0].beacons.ad_hide;
+                    data = {};
                 
                 el_content.classList.add("hide");
+
+                facade.getJSONP(ad_hide, data);
             },
 
             image: function() {
@@ -90,19 +93,11 @@ var bannerModule = function(options) {
 
             like: function() {                
                 var ad_like = cachedData.ads[0].beacons.ad_like,
-                    script = doc.createElement("script"),
-                    head;
-                
-                script.type = "text/javascript";
-                script.src = ad_like;
-
-                head = doc.getElementsByTagName('head')[0];
-
-                head.appendChild(script);
+                    data = {};
 
                 helper.setToStorage('like');
 
-                //facade.getResult("GET", ad_like, helper.successCallback)
+                facade.getJSONP(ad_like, data);
             },
 
             dislike: function() {
@@ -110,18 +105,21 @@ var bannerModule = function(options) {
             },
 
             stop: function() {
-                var ad_hide = cachedData.ads[0].beacons.ad_hide;
+                var ad_hide = cachedData.ads[0].beacons.ad_hide,
+                    data = {};
 
                 helper.setToStorage('stop');
 
-                facade.getResult("GET", ad_hide, helper.successCallback)
+                facade.getJSONP(ad_hide, data);
             },
 
             share: function() {
                 var ad_share = cachedData.ads[0].beacons.ad_share;
+                    data = {};
+
                 helper.setToStorage('share');
 
-                facade.getResult("GET", ad_share, helper.successCallback)
+                facade.getJSONP(ad_share, data);
             },
         },
 
@@ -145,20 +143,32 @@ var bannerModule = function(options) {
             helper.applyData(cachedData);
         },
         loadData: function() {
-            var uri = 'publick/json/test_data.json';
-            var self = this;
-            
-            function successCallback(data) {
-                cachedData = JSON.parse(data);
-                self.init(); // may be use underscore.js
+            var url = 'http://loopme.me/api/v2/ads?p=1&vt=3syja4w0tw&ak=6b1dcb4bef&pp=1',
+                uri = 'publick/json/test_data.json'
+                data = {},
+                self = this;
+
+            var successCallback = function(data){ 
+                if (data && data.ads && data.session) {
+                    cachedData = data;
+                    self.init(); 
+                } else {
+                    facade.getResult("GET", uri, mockCallback);
+                }               
             };
 
-            facade.getResult("GET", uri, successCallback);
+            function mockCallback(data) {
+                cachedData = JSON.parse(data);
+                self.init();
+            };
+            
+            facade.getJSONP(url, data, successCallback);
         }
     };
 };
 
-window.onload = function() { 
+window.onload = function() {
+
     var activeModule = new bannerModule({
         close: 'close',
         image: 'image',
@@ -168,9 +178,6 @@ window.onload = function() {
         stop: 'stop',
         share: 'share'
     });
-
-    //with mock
-    //activeModule.setData(mockJSON);
 
     //with ajax 
     activeModule.loadData();

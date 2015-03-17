@@ -21,6 +21,30 @@ body {
     z-index: 1
 }
 
+#image {
+    display: block;
+}
+
+#mirror {
+    margin-top: 2px;
+    opacity: 0.9;
+    width: 100%;
+    -webkit-transform: rotate(180deg);
+    -webkit-transform: scaleY(-1);
+    -webkit-mask-image: -webkit-gradient(
+        linear, center bottom, center top, 
+        color-stop(0.00,  rgba(0,0,0,1)),
+        color-stop(0.45,  rgba(0,0,0,0)),
+        color-stop(0.50,  rgba(0,0,0,0)),
+        color-stop(0.65,  rgba(0,0,0,0)),
+        color-stop(1.00,  rgba(0,0,0,0)));
+}
+
+.wrapper-img {
+    height: 35px;
+    overflow: hidden;
+}
+
 #main-content:after {
     content: ' ';
     width: 100%;
@@ -79,7 +103,6 @@ body {
 
 .button {
     color: #00AF33;
-    padding-top: 20px;
     padding-bottom: 10px;
 }
 /*===================*/
@@ -155,7 +178,6 @@ body {
 
 .button {
     color: #00AF33;
-    padding-top: 20px;
 }
 /*=====================*/
 

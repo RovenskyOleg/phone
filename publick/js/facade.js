@@ -26,5 +26,9 @@ function Facade() {
         ajax.send();
     };
 
+    this.getJSONP = function(url, data, callback) {
+        J50Npi.getJSON(url, data, callback);
+    }
+
     return this;
 }
